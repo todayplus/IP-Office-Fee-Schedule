@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<title>특허청 수수료정보안내 | 한눈에 보는 특허·실용신안·디자인·상표 수수료</title>
+<meta name="description" content="특허로(patent.go.kr) 수수료정보안내를 반응형으로 재구성한 페이지입니다. 출원료, 등록료, 심판청구료, PCT/마드리드/헤이그 국제출원 수수료, 감면 안내를 검색하고 즐겨찾기 할 수 있습니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="white">
+
+<!-- Skip link -->
+<a href="#mainContent" class="skip-link">본문으로 바로가기</a>
+
+<!-- ===================== Header / Toolbar ===================== -->
+<header id="siteHeader" class="site-header">
+    <div class="header-inner">
+        <div class="brand">
+            <i class="fa-solid fa-stamp brand-icon" aria-hidden="true"></i>
+            <div class="brand-text">
+                <h1>수수료정보안내</h1>
+                <p class="brand-sub">특허 · 실용신안 · 디자인 · 상표 수수료 한눈에 보기</p>
+            </div>
+        </div>
+
+        <div class="header-tools">
+            <!-- 검색 -->
+            <div class="search-box" role="search">
+                <label for="searchInput" class="sr-only">수수료 정보 검색</label>
+                <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+                <input type="search" id="searchInput" placeholder="예) 출원료, 심사청구료, 감면, PCT..." autocomplete="off">
+                <button type="button" id="searchClearBtn" class="search-clear" title="검색어 지우기" aria-label="검색어 지우기">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- 즐겨찾기 -->
+            <div class="tool-group">
+                <button type="button" id="favToggleBtn" class="tool-btn" title="즐겨찾기 목록 열기" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-regular fa-star"></i>
+                    <span class="tool-label">즐겨찾기</span>
+                    <span id="favCount" class="fav-badge" hidden>0</span>
+                </button>
+            </div>
+
+            <!-- 글자 크기 -->
+            <div class="tool-group font-tools" role="group" aria-label="글자 크기 조절">
+                <button type="button" class="tool-btn small" id="fontDownBtn" title="글자 작게" aria-label="글자 작게">A-</button>
+                <button type="button" class="tool-btn small" id="fontUpBtn" title="글자 크게" aria-label="글자 크게">A+</button>
+            </div>
+
+            <!-- 테마 -->
+            <div class="theme-switch" role="group" aria-label="테마 선택">
+                <button type="button" class="theme-btn theme-white active" data-theme="white" title="화이트 테마" aria-pressed="true">
+                    <span class="dot"></span>화이트
+                </button>
+                <button type="button" class="theme-btn theme-ivory" data-theme="ivory" title="아이보리 테마" aria-pressed="false">
+                    <span class="dot"></span>아이보리
+                </button>
+                <button type="button" class="theme-btn theme-black" data-theme="black" title="블랙 테마" aria-pressed="false">
+                    <span class="dot"></span>블랙
+                </button>
+            </div>
+
+            <button type="button" id="mobileMenuBtn" class="mobile-menu-btn" aria-label="메뉴 열기" aria-expanded="false">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 검색 결과 카운트 바 -->
+    <div id="searchStatusBar" class="search-status-bar" hidden>
+        <span id="searchStatusText"></span>
+        <button type="button" id="searchStatusClose" aria-label="검색결과 표시줄 닫기"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+</header>
+
+<!-- ===================== 즐겨찾기 패널 ===================== -->
+<aside id="favPanel" class="fav-panel" aria-label="즐겨찾기 목록" hidden>
+    <div class="fav-panel-head">
+        <h2><i class="fa-solid fa-star"></i> 즐겨찾기</h2>
+        <button type="button" id="favPanelClose" aria-label="즐겨찾기 패널 닫기"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <ul id="favList" class="fav-list">
+        <li class="fav-empty">즐겨찾기한 항목이 없습니다.<br>각 항목 제목 옆의 <i class="fa-regular fa-star"></i> 버튼을 눌러 추가해 보세요.</li>
+    </ul>
+</aside>
+<div id="favOverlay" class="fav-overlay" hidden></div>
+
+<!-- ===================== 안내 배너 ===================== -->
+<div class="intro-banner">
+    <div class="intro-inner">
+        <p>
+            특허, 실용신안, 디자인, 상표의 취득 과정에서 요구되는 <strong>출원관련 수수료</strong>, <strong>특허(등록)료</strong>,
+            <strong>심판관련 청구료</strong>, <strong>교부신청료·납부요령</strong>, <strong>PCT 국제출원 수수료</strong>,
+            <strong>마드리드·헤이그 국제출원 수수료</strong>, <strong>수수료 면제·감면</strong> 정보를 분야별로 정리했습니다.
+        </p>
+        <p class="intro-note">기준일: 2023.08.01 (일부 항목은 표기된 시행일 적용) · 본 페이지는 특허로(patent.go.kr) 공개 정보를 재구성한 참고용 자료이며, 법적 효력은 원문(특허료 등의 징수규칙)을 따릅니다.</p>
+    </div>
+</div>
+
+<div class="layout-wrap">
+
+    <!-- ===================== 좌측 목차(TOC) ===================== -->
+    <nav id="tocNav" class="toc-nav" aria-label="목차">
+        <div class="toc-head">
+            <span>목차</span>
+            <button type="button" id="tocCloseBtn" class="toc-close-btn" aria-label="목차 닫기"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <ol id="tocList" class="toc-list"></ol>
+        <a href="#" id="printLink" class="toc-print"><i class="fa-solid fa-print"></i> 이 페이지 인쇄</a>
+    </nav>
+    <div id="tocOverlay" class="toc-overlay" hidden></div>
+
+    <!-- ===================== 본문 ===================== -->
+    <main id="mainContent" class="main-content">
+
+        <!-- SECTION 1 -->
+        <section class="fee-section" id="sec-apply" data-title="출원 관련 수수료">
+            <div class="section-head">
+                <h2><span class="sec-num">01</span> 출원 관련 수수료</h2>
+                <button type="button" class="fav-star" aria-label="즐겨찾기 추가/해제" title="즐겨찾기"><i class="fa-regular fa-star"></i></button>
+            </div>
+
+            <h3>출원료</h3>
+            <p class="table-note"><span>2023.08.01 기준 (★표는 면제·감면대상 수수료입니다.) · 표는 좌우로 스크롤할 수 있습니다.</span></p>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">출원료 목록: 권리(특허/실용신안/디자인/상표)별 전자출원·서면출원 기본료·가산료</caption>
+                    <thead>
+                        <tr>
+                            <th rowspan="2">구분/권리</th>
+                            <th rowspan="2">특허★</th>
+                            <th rowspan="2">실용신안★</th>
+                            <th colspan="2">디자인★</th>
+                            <th rowspan="2">상표</th>
+                        </tr>
+                        <tr>
+                            <th>심사</th>
+                            <th>일부심사</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="1">전자출원(온라인) 기본료</th>
+                            <td>국어 46,000원<br>외국어 73,000원</td>
+                            <td>국어 20,000원<br>외국어 32,000원</td>
+                            <td>1디자인마다 94,000원</td>
+                            <td>1디자인마다 45,000원</td>
+                            <td>1상품류구분마다 52,000원 + 지정상품 가산금<br><span class="dim">※ 고시된 상품명칭만 사용 시 46,000원 + 지정상품 가산금</span></td>
+                        </tr>
+                        <tr>
+                            <th>서면출원 기본료</th>
+                            <td>국어 66,000원<br>외국어 93,000원</td>
+                            <td>국어 30,000원<br>외국어 42,000원</td>
+                            <td>1디자인마다 104,000원</td>
+                            <td>1디자인마다 55,000원</td>
+                            <td>1상품류구분마다 62,000원 + 지정상품 가산금<br><span class="dim">※ 고시된 상품명칭만 사용 시 56,000원 + 지정상품 가산금</span></td>
+                        </tr>
+                        <tr>
+                            <th>서면출원 가산료</th>
+                            <td>명세서·도면·요약서 합계 20면 초과 1면마다 1,000원 가산</td>
+                            <td>명세서·도면·요약서 합계 20면 초과 1면마다 1,000원 가산</td>
+                            <td>없음</td>
+                            <td>없음</td>
+                            <td>없음</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="note-list">
+                <li>특허권 존속기간 연장등록출원료 : 매건 300,000원 / 외국어 특허·실용신안출원은 영어만 가능</li>
+                <li>지정상품 가산금 : 1상품류 구분의 지정상품이 10개 초과 시, 초과하는 지정상품마다 2,000원 가산(2023.8.1. 이후 출원 건부터 적용)</li>
+                <li>(상표출원) 출원료 납부 시 고시된 상품명칭만 사용했는지 여부는 '출원서(분할출원 포함) 제출 시'를 기준으로 함<br>
+                    [적용례] (원출원, 전자출원, 고시된 상품명칭 + 그외 상품명칭) 1상품류 구분마다 62,000원 → (분할출원, 전자출원, 고시된 상품명칭) 1상품류 구분마다 56,000원</li>
+                <li>실용신안권의 존속기간연장등록출원료 : 매건 150,000원</li>
+                <li>지식재산처에서 제공하지 않은 소프트웨어로 작성 제출 시 : 특허 매건 56,000원, 실용신안 매건 25,000원, 디자인 매건 99,000원(심사)/50,000원(일부심사)</li>
+            </ul>
+
+            <h3>우선권주장 신청료 · 추가료, 심사청구료★, 우선심사신청료, 재심사청구료</h3>
+            <p class="table-note"><span>표는 좌우로 스크롤할 수 있습니다.</span></p>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">우선권주장, 심사청구료, 우선심사신청료, 재심사청구료 표</caption>
+                    <thead>
+                        <tr>
+                            <th rowspan="2">구분/권리</th>
+                            <th rowspan="2">특허</th>
+                            <th rowspan="2">실용신안</th>
+                            <th colspan="2">디자인</th>
+                            <th rowspan="2">상표</th>
+                        </tr>
+                        <tr><th>심사</th><th>일부심사</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><th>우선권주장 신청료(전자)</th><td>18,000원(1우선권주장마다)</td><td>18,000원(1우선권주장마다)</td><td>18,000원(1우선권주장마다)</td><td>18,000원(1우선권주장마다)</td><td>18,000원(1상품류 구분마다)</td></tr>
+                        <tr><th>우선권주장 신청료(서면)</th><td>20,000원(1우선권주장마다)</td><td>20,000원(1우선권주장마다)</td><td>20,000원(1우선권주장마다)</td><td>20,000원(1우선권주장마다)</td><td>20,000원(1상품류 구분마다)</td></tr>
+                        <tr><th>우선권주장 추가료(전자)</th><td>18,000원(1우선권주장마다)</td><td>18,000원(1우선권주장마다)</td><td>없음</td><td>없음</td><td>없음</td></tr>
+                        <tr><th>우선권주장 추가료(서면)</th><td>20,000원(1우선권주장마다)</td><td>20,000원(1우선권주장마다)</td><td>없음</td><td>없음</td><td>없음</td></tr>
+                        <tr><th>심사청구료★ 기본료</th><td>166,000원</td><td>71,000원</td><td>없음</td><td>없음</td><td>없음</td></tr>
+                        <tr><th>심사청구료★ 가산료(청구범위 1항마다)</th><td>51,000원 가산</td><td>19,000원 가산</td><td>없음</td><td>없음</td><td>없음</td></tr>
+                        <tr><th>재심사청구료 기본료</th><td>100,000원</td><td>50,000원</td><td colspan="2">하단 참조</td><td>(전자문서) 20,000원 / (서면) 30,000원<br><span class="dim">※ 2023.2.4. 이후 출원 건부터 적용</span></td></tr>
+                        <tr><th>재심사청구료 가산료(청구범위 1항마다)</th><td>10,000원 가산</td><td>5,000원 가산</td><td colspan="2">가산료 부과 기준은 하단 안내 참조<br><span class="dim">※ 2023.8.1. 이후 청구 건부터 적용</span></td><td></td></tr>
+                        <tr><th>우선심사 신청료</th><td>200,000원</td><td>100,000원</td><td>1디자인마다 70,000원</td><td>1디자인마다 70,000원</td><td>1상품류 구분마다 160,000원</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="note-list">
+                <li>상표 우선심사 신청은 2009.04.01 이후 가능</li>
+                <li>디자인재심사의 경우 "디자인 재심사를 위한 보정료"가 재심사청구료에 해당 (전자문서 매건 30,000원, 서면 매건 40,000원)</li>
+                <li>심사청구와 동시에 심사유예 신청 시 심사청구료는 심사유예 희망 시점으로부터 2개월 전까지 납부 가능(2011.04.01 이후 청구건 적용)</li>
+                <li>재심사청구료(상표) 가산료 : 보정 후 상품류 구분이 보정 전보다 초과하는 구분마다 52,000원/62,000원, 지정상품 10개 초과 시 초과 지정상품마다 2,000원</li>
+            </ul>
+
+            <h3>변경출원료★, 분할출원료★, 분리출원료★</h3>
+            <ul class="note-list">
+                <li>변경출원료 : 특허↔실용신안(해당권리 신규출원료 금액) / 상표↔단체표장·증명표장(전자 9,000원, 서면 10,000원)</li>
+                <li>분할출원료 : 해당 권리의 신규출원료에 해당하는 금액
+                    <ul>
+                        <li>특허 분할 2회차 : 신규출원료의 2배, 3회차 3배, 4회차 4배, 5회차 이상 5배</li>
+                        <li>복수디자인등록출원(2014.7.1 이후) : 동일출원 분할(전자 1디자인 10,000원/서면 20,000원), 일부심사→심사등록 분할(전자 59,000원/서면 69,000원)</li>
+                        <li>심사등록→일부심사등록 분할 출원 시 전자 39,000원/서면 29,000원 반환</li>
+                        <li>다류지정상품등록출원 분할 : 분할되는 출원마다 10,000원</li>
+                    </ul>
+                </li>
+                <li>분리출원료 : 특허(전자 국어 46,000원/서면 66,000원), 실용신안(전자 20,000원/서면 30,000원), 20면 초과 1면마다 1,000원 가산</li>
+            </ul>
+
+            <h3>보정료</h3>
+            <ul class="note-list">
+                <li>절차·내용보정서 : 전자문서 매건 4,000원 / 서면 매건 14,000원</li>
+                <li>외국어 특허·실용신안출원 오역정정료 : 특허(전자 71,000원+항당 22,000원/서면 91,000원+항당 22,000원), 실용신안(전자 35,000원+항당 9,000원/서면 45,000원+항당 9,000원)</li>
+                <li>디자인변경 보정료 : 단독↔관련 동일출원(전자 4,000원/서면 14,000원), 일부심사→심사등록 변경(전자 53,000원/서면 63,000원), 복수디자인 도면보정(전자 4,000원/서면 14,000원)</li>
+                <li>상품류구분·지정상품 보정료 : 전자 4,000원 / 서면 14,000원 (증가 상품류마다 전자 52,000원/서면 62,000원, 지정상품 10개 초과 시 초과마다 2,000원)</li>
+            </ul>
+
+            <h3>기타 수수료</h3>
+            <ul class="note-list">
+                <li>보완료 : 특허(실용신안) 공지주장 보완(전자 18,000원/서면 20,000원), 디자인 절차보완(전자 4,000원/서면 14,000원), 상표 절차보완(매건 10,000원)</li>
+                <li>출원인 변경 신고료 : 전자 11,000원/서면 13,000원, 상속·법인분할합병 시 전자 5,000원/서면 6,500원</li>
+                <li>법정기간 연장신청료 : 1회 20,000원, 2회 30,000원</li>
+                <li>지정기간 연장신청료 : 1개월 이하 20,000원, 2개월 30,000원, 3개월 60,000원, 4개월 120,000원, 4개월 초과 240,000원</li>
+                <li>(상표) 절차계속신청료 매건 40,000원 / 등록료납부 기간연장청구료 매건 20,000원</li>
+                <li>외국어 국제 특허·실용신안출원 국어번역문 제출기간 연장료 : 20,000원(1회/1개월)</li>
+                <li>비밀디자인 청구료 : 전자 18,000원/서면 20,000원</li>
+                <li>디자인등록 출원공개 신청료 : 전자 21,000원/서면 24,000원</li>
+                <li>(디자인일부심사/상표) 이의신청료 : 50,000원</li>
+                <li>기간경과 구제 신청료 : 전자 15,000원/서면 17,000원</li>
+            </ul>
+        </section>
+
+        <!-- SECTION 2 -->
+        <section class="fee-section" id="sec-register" data-title="특허(등록)료">
+            <div class="section-head">
+                <h2><span class="sec-num">02</span> 특허(등록)료</h2>
+                <button type="button" class="fav-star" aria-label="즐겨찾기 추가/해제" title="즐겨찾기"><i class="fa-regular fa-star"></i></button>
+            </div>
+
+            <h3>설정등록료★ · 연차등록료★</h3>
+            <p class="table-note"><span>표는 좌우로 스크롤할 수 있습니다.</span></p>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">특허/실용신안/디자인 설정등록료 및 연차등록료</caption>
+                    <thead>
+                        <tr>
+                            <th rowspan="2">권리</th>
+                            <th colspan="2" rowspan="2">설정등록료(1~3년분)</th>
+                            <th colspan="4">연차등록료</th>
+                            <th rowspan="2">추가납부기간<br>가산료</th>
+                        </tr>
+                        <tr><th>4~6년</th><th>7~9년</th><th>10~12년</th><th>13~25년</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><th>특허 기본료</th><td colspan="2">매년 13,000원</td><td>매년 36,000원</td><td>매년 90,000원</td><td>매년 216,000원</td><td>매년 324,000원</td><td>1개월까지: 등록료 3%</td></tr>
+                        <tr><th>특허 가산료(청구항마다)</th><td colspan="2">매년 12,000원</td><td>매년 20,000원</td><td>매년 34,000원</td><td>매년 49,000원</td><td>매년 49,000원</td><td>2개월까지: 등록료 6%</td></tr>
+                        <tr><th>실용신안 기본료</th><td colspan="2">매년 12,000원</td><td>매년 25,000원</td><td>매년 60,000원</td><td>매년 160,000원</td><td>(13~15년) 매년 240,000원</td><td>3개월까지: 등록료 9%</td></tr>
+                        <tr><th>실용신안 가산료(청구항마다)</th><td colspan="2">매년 4,000원</td><td>매년 9,000원</td><td>매년 14,000원</td><td>매년 20,000원</td><td>(13~15년) 매년 20,000원</td><td>4개월까지: 등록료 12%</td></tr>
+                        <tr><th>디자인 심사</th><td colspan="2">매년 1디자인마다 25,000원</td><td>매년 35,000원</td><td>매년 70,000원</td><td>매년 140,000원</td><td>(13~20년) 매년 210,000원</td><td>5개월까지: 등록료 15%</td></tr>
+                        <tr><th>디자인 일부심사</th><td colspan="2">매년 1디자인마다 25,000원</td><td>매년 34,000원</td><td>매년 34,000원</td><td>매년 34,000원</td><td>(13~20년) 매년 34,000원</td><td>6개월까지: 등록료 18%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">상표 설정등록료·지정상품추가등록료·존속기간갱신등록료</caption>
+                    <thead><tr><th>상표</th><th>구분</th><th>금액</th></tr></thead>
+                    <tbody>
+                        <tr><th rowspan="3">상표</th><th>설정등록</th><td>1상품류구분마다 201,000원+지정상품가산금 <span class="dim">(2회 분할납부 시 매회 122,000원+지정상품가산금)</span></td></tr>
+                        <tr><th>지정상품 추가</th><td>1상품류구분마다 201,000원+지정상품가산금</td></tr>
+                        <tr><th>존속기간 갱신</th><td>정상납부: 1상품류구분마다 300,000원+가산금 (2회 분할납부 시 매회 184,000원)<br>갱신추납: 1상품류구분마다 330,000원+가산금 (2회 분할납부 시 매회 203,000원)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="note-list">
+                <li>지정상품 가산금 : 1상품류 구분의 지정상품 10개 초과 시, 초과 지정상품마다 2,000원(2회 분할납부 시 1,000원 가산)</li>
+                <li>상표 등록료 이외 지방세 9,120원 (등록세 7,600원 + 지방교육세 1,520원) — 상표권설정/존속기간 갱신등록 시 부과, 2회 분할납부 시 1회차에 전액 납부</li>
+                <li>특허·실용신안·디자인 설정등록료 정상납부기간 : 등본 수령일부터 3개월 이내, 추가납부기간 : 정상납부 기간 종료일부터 6개월 이내(미납 시 등록포기 간주)</li>
+                <li>연차등록료 추가납부기간 6개월 이내 / 권리회복 : 추가납부기간 만료일부터 3개월 이내(2배 상당액 납부)</li>
+                <li>상표 설정등록료 정상납부기간 : 등본 수령일부터 2개월 이내(30일 이내 연장신청 가능, 추가납부기간 없음)</li>
+                <li>특허권 존속기간 만료일 : 출원일 후 20년 / 실용신안권 : 출원일 후 10년 (제한사유 시 연장 가능)</li>
+                <li>연차등록료 3년분 이상 일괄납부 시 총납부금액 10% 차감</li>
+            </ul>
+
+            <h3>기타 등록료</h3>
+            <ul class="note-list">
+                <li>권리이전 등록료 : 매건 40,000원(상속·법인분할합병 시 14,000원) — 국공립학교 교직원 발명의 전담조직 이전 시 면제(상표 제외)</li>
+                <li>실시권(사용권)·질권 이전등록료 : 매건 43,000원(상속·법인분할합병 시 14,000원)</li>
+                <li>다류지정 상표권 분할등록료 : 매건 56,000원</li>
+                <li>실시권·사용권설정 또는 보존등록료 : 전용 72,000원, 통상 43,000원</li>
+                <li>질권설정등록[실시(사용)권]·처분제한등록료 : 매건 84,000원 (국가기관/법원촉탁은 면제)</li>
+                <li>질권설정등록(특허·실용신안·디자인·상표권) : 매건 20,000원 (공동담보 6건 초과 시 초과건마다 10,000원, '26.12.31.까지 한시적용)</li>
+                <li>등록사항 경정·변경·취소·회복등록료 : 매건 5,000원(말소등록료 무료)</li>
+                <li>가등록료 : 매건 13,000원 / 신탁등록·변경등록료 : 매건 20,000원</li>
+            </ul>
+        </section>
+
+        <!-- SECTION 3 -->
+        <section class="fee-section" id="sec-trial" data-title="심판관련 청구료(신청료)">
+            <div class="section-head">
+                <h2><span class="sec-num">03</span> 심판관련 청구료(신청료)</h2>
+                <button type="button" class="fav-star" aria-label="즐겨찾기 추가/해제" title="즐겨찾기"><i class="fa-regular fa-star"></i></button>
+            </div>
+
+            <h3>심판청구료 (★적극적 권리범위확인심판 청구료)</h3>
+            <p class="table-note"><span>표는 좌우로 스크롤할 수 있습니다.</span></p>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">특허·실용신안, 디자인, 상표 심판청구료</caption>
+                    <thead>
+                        <tr>
+                            <th rowspan="2">권리/구분</th>
+                            <th>특허·실용신안</th>
+                            <th colspan="2">디자인</th>
+                            <th colspan="3">상표</th>
+                        </tr>
+                        <tr>
+                            <th>거절·무효·정정·권리범위확인, 통상실시권허여</th>
+                            <th>거절·무효·취소·권리범위확인, 통상실시권허여</th>
+                            <th>보정각하</th>
+                            <th>거절</th>
+                            <th>무효·취소·권리범위확인</th>
+                            <th>보정각하</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><th>전자문서제출 기본료</th><td>매건 150,000원</td><td>1디자인마다 240,000원</td><td>매건 200,000원</td><td>상품류마다 240,000원<sup>*</sup></td><td>상품류마다 240,000원<sup>*</sup></td><td>매건 200,000원</td></tr>
+                        <tr><th>전자문서제출 가산료</th><td>청구항마다 15,000원</td><td>없음</td><td>없음</td><td>하단참조</td><td>없음</td><td>없음</td></tr>
+                        <tr><th>서면제출 기본료</th><td>매건 170,000원</td><td>1디자인마다 260,000원</td><td>매건 220,000원</td><td>상품류마다 250,000원<sup>*</sup></td><td>상품류마다 250,000원<sup>*</sup></td><td>매건 220,000원</td></tr>
+                        <tr><th>서면제출 가산료</th><td>청구항마다 15,000원</td><td>없음</td><td>없음</td><td>하단참조</td><td>없음</td><td>없음</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="dim">* 2023.2.4. 이후 출원 건부터 적용</p>
+            <ul class="note-list">
+                <li>상품분류전환등록신청 거절결정불복심판 : 전자 매건 250,000원 / 서면 매건 260,000원</li>
+                <li>거절결정불복심판 청구범위 항수·디자인수·상품류수 산정은 특허심판원 예규 '거절결정불복심판청구관련 수수료 산정기준'에 따름</li>
+                <li>보정각하불복심판 청구료는 2001.7.1. 전 출원 특허, 1999.7.1. 전 출원 실용신안에 적용</li>
+                <li>특허·실용신안 취소신청 청구료 : 전자 매건 50,000원(항당 5,000원 가산) / 서면 매건 60,000원(항당 5,000원 가산)</li>
+                <li>2023.2.3. 이전 상표 출원건의 거절결정불복심판 등 : 전자 1상품류구분마다 240,000원 / 서면 260,000원</li>
+                <li>상표심판 가산료(지정상품 10개 초과, 2023.8.1. 이후 출원) : 초과 지정상품마다 2,000원 가산</li>
+            </ul>
+
+            <h3>기타 청구료</h3>
+            <ul class="note-list">
+                <li>정정청구료 : 전자 매건 30,000원(항당 7,000원) / 서면 매건 40,000원(항당 7,000원)</li>
+                <li>심판·재심청구 참가신청료 : 전자 142,000원(당사자참가)/16,000원(보조참가), 서면 150,000원/18,000원</li>
+                <li>심판관 제척·기피 신청료 : 전자 매건 1,000원/서면 1,500원</li>
+                <li>비용액 결정 청구료 : 매건 500원 / 집행문 정본 청구료 : 매건 400원</li>
+                <li>심판청구서 관련 보정료 : 전자 매건 4,000원/서면 14,000원</li>
+                <li>기간경과 구제 신청료 : 전자 매건 15,000원/서면 17,000원</li>
+            </ul>
+        </section>
+
+        <!-- SECTION 4 -->
+        <section class="fee-section" id="sec-doc" data-title="각종 서류의 등·초본 발급신청료 등">
+            <div class="section-head">
+                <h2><span class="sec-num">04</span> 각종 서류의 등 · 초본 발급신청료 등</h2>
+                <button type="button" class="fav-star" aria-label="즐겨찾기 추가/해제" title="즐겨찾기"><i class="fa-regular fa-star"></i></button>
+            </div>
+            <ul class="note-list">
+                <li>각종서류 증명신청료 : 온라인 신청·수령 무료 / 그 외 500원 + 첨부물 복사 가산료(서면 매면 100원, 모사전송 매면 300원)</li>
+                <li>등록원부 사본·기록사항 발급 신청료 : 온라인 신청·수령 무료 / 그 외 500원 + 10면 초과 가산료</li>
+                <li>출원·등록·심판 관련서류, 이의신청 관련서류, 정보제공 관련서류 사본 및 공보류·도서 복사 신청료 : 온라인 수령(공보·도서 제외) 무료, 서면 매면 100원, 모사전송 매면 300원</li>
+                <li>특허(등록)증 등 재발급 신청료 : 전자 매건 5,000원 / 서면 매건 6,500원 / 전자등록증 온라인 수령 시 무료</li>
+                <li>휴대용 특허(등록)증 등 발급 신청료 : 전자 매건 7,000원 / 서면 9,000원</li>
+            </ul>
+            <h3>등록료 등 수수료 납부요령</h3>
+            <ul class="note-list">
+                <li>접수번호(납부자번호) 부여일 다음날까지 전국 국고수납은행 또는 지로(giro.or.kr) 납부</li>
+                <li>우편 납부 시 우체국 통상환으로 교환하여 서류에 동봉·제출</li>
+                <li>수수료만 보정하는 경우 지식재산처 발송 납부서로 납부</li>
+                <li>연차특허(등록)료 납부절차 간소화 : 지정납부자번호만으로 정상납부기간 내 납부 가능(2006.07.01 시행)</li>
+                <li>수수료 자동납부제도 : 사전등록 계좌에서 자동 계좌이체 가능(2009.07.01 시행)</li>
+            </ul>
+        </section>
+
+        <!-- SECTION 5 -->
+        <section class="fee-section" id="sec-pct" data-title="PCT 국제출원 수수료">
+            <div class="section-head">
+                <h2><span class="sec-num">05</span> PCT 국제출원 수수료</h2>
+                <button type="button" class="fav-star" aria-label="즐겨찾기 추가/해제" title="즐겨찾기"><i class="fa-regular fa-star"></i></button>
+            </div>
+
+            <h3>국제출원 수수료</h3>
+            <p class="table-note"><span>표는 좌우로 스크롤할 수 있습니다. 적색(강조) 항목은 환율변동으로 수시 변동될 수 있습니다.</span></p>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">국제출원료, 조사료, 송달료</caption>
+                    <thead><tr><th colspan="3">종류</th><th>납부액</th><th>납부기간</th><th>납부처</th></tr></thead>
+                    <tbody>
+                        <tr><th rowspan="2">국제출원료</th><th colspan="2">출원서류 30매까지</th><td>1,330 스위스프랑</td><td rowspan="9">국제출원 접수일부터 1월 이내</td><td rowspan="9">한국지식재산처</td></tr>
+                        <tr><th colspan="2">30매 초과 1매당</th><td>초과매수 × 15 스위스프랑</td></tr>
+                        <tr><th rowspan="2">조사료(한국)</th><th>한국어</th><td colspan="0">450,000원</td></tr>
+                        <tr><th>영어</th><td>1,200,000원</td></tr>
+                        <tr><th colspan="2">조사료(오스트리아)</th><td class="highlight">3,250,000원 <span class="dim">(2026.4.1. 시행)</span></td></tr>
+                        <tr><th colspan="2">조사료(호주)</th><td class="highlight">2,268,000원 <span class="dim">(2026.5.1. 시행)</span></td></tr>
+                        <tr><th colspan="2">조사료(일본)</th><td class="highlight">1,356,000원 <span class="dim">(2026.1.1. 시행)</span></td></tr>
+                        <tr><th colspan="2">조사료(싱가포르)</th><td class="highlight">2,765,000원 <span class="dim">(2026.6.1. 시행)</span></td></tr>
+                        <tr><th colspan="3">송달료</th><td>45,000원</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="note-list">
+                <li>「국제출원수수료납부서」제출 후 납부자번호를 부여받아 익일까지 납부(국제출원서 접수번호로는 납부 불가)</li>
+                <li>전자적 형태(온라인, CD-R) 제출 시 감면액 : 300 스위스프랑</li>
+                <li>국제조사보고서 작성 시 관련 국내출원 심사결과를 이용하는 경우 청구에 따라 조사료의 75% 반환 가능</li>
+                <li>국제조사기관이 오스트리아인 경우, 출원인 전원이 자연인이고 오스트리아를 국제조사기관으로 하는 국가의 국민·거주자이면 조사료 75% 감면(25%만 납부)</li>
+                <li>일본특허청을 국제조사기관 선택 시 감면 신청서를 수리관청에 제출 필요 (TEL +81-3-3581-1101(ex.2642))</li>
+                <li>접수일부터 1월 이내 미납 시 보정요구, 요구일로부터 1월 이내 미납분+가산료(미납액의 50%, 최저 송달료, 최대 국제출원료의 50%) 납부</li>
+            </ul>
+
+            <h3>PCT국제출원 시 예상비용 (2026.08. 기준)</h3>
+            <ul class="note-list">
+                <li>예시(서면·국어·한국지식재산처를 국제조사기관 지정) : 송달료 45,000원 + 국제출원료 1,330스위스프랑(약 2,372,799원, 환율 1,784.06 기준) + 조사료 450,000원 = <strong>2,867,799원</strong> (PCT 국내단계 비용 별도)</li>
+                <li>국제조사보고서 작성 시 관련 국내출원 심사결과 이용하면 조사료의 75% 반환 가능</li>
+            </ul>
+
+            <h3>국제예비심사 수수료</h3>
+            <p class="table-note"><span>표는 좌우로 스크롤할 수 있습니다. 적색(강조) 항목은 환율변동으로 수시 변동됩니다.</span></p>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">국제예비심사기관별 심사료·취급료·송금정보</caption>
+                    <thead><tr><th>국제예비심사기관</th><th>종류</th><th>금액</th><th>송금은행 및 계좌번호</th><th>주소</th></tr></thead>
+                    <tbody>
+                        <tr><th rowspan="2">한국</th><th>심사료</th><td>450,000원</td><td rowspan="2">납부자번호 부여 후 은행 납부</td><td rowspan="2">대전광역시 서구 청사로 189 정부대전청사 4동 지식재산처 고객지원실 (35208)</td></tr>
+                        <tr><th>취급료</th><td class="highlight">377,000원 <span class="dim">(2026.6.1. 시행)</span></td></tr>
+                        <tr><th rowspan="2">오스트리아</th><th>심사료</th><td class="highlight">EUR 1,749</td><td rowspan="2">Osterreichische Postparkasse / Austrian Patent Office / 5160000</td><td rowspan="2">Austrian Patent Office(IPEA/AT), Dresdner StraBe 87, P.O.B. 95, A-1200, Wien, Austria</td></tr>
+                        <tr><th>취급료</th><td class="highlight">EUR 215 <span class="dim">(2026.1.1. 시행)</span></td></tr>
+                        <tr><th rowspan="2">일본</th><th>심사료</th><td class="highlight">일본어 출원 JPY 34,000 / 영어 출원 JPY 69,000</td><td rowspan="2">SUMITOMO MITSUI BANKING CORP. / JAPAN PATENT OFFICE / 096-173377</td><td rowspan="2">Japanese Patent Office(IPEA/JP), 4-3 Kasumigaseki 3-chome, Chiyoda-ku, Tokyo 100-8915, Japan</td></tr>
+                        <tr><th>취급료</th><td class="highlight">JPY 37,700 <span class="dim">(2026.1.1. 시행)</span></td></tr>
+                        <tr><th rowspan="2">호주</th><th>심사료</th><td class="highlight">AUD 590(820)*</td><td rowspan="2">National Australia Bank / BSB 082-296 / 868711229</td><td rowspan="2">Australian Patent Office(IPEA/AU), P.O. Box 200 Woden, A.C.T. 2606 Australia</td></tr>
+                        <tr><th>취급료</th><td class="highlight">AUD 380 <span class="dim">(2026.1.1. 시행)</span></td></tr>
+                        <tr><th rowspan="2">싱가포르</th><th>심사료</th><td class="highlight">SGD 900</td><td rowspan="2">Development Bank of Singapore Ltd / 003-900067-7</td><td rowspan="2">Paya Lebar Link, #11-03, PLQ 1 Paya Lebar Quarter, Singapore 408533</td></tr>
+                        <tr><th>취급료</th><td class="highlight">SGD 324 <span class="dim">(2026.1.1. 시행)</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="note-list">
+                <li>* 국제조사보고서가 호주특허청에서 작성되지 않은 경우</li>
+                <li>납부기간 : 국제예비심사청구서 제출일부터 1월 또는 우선일부터 22개월 중 늦게 만료하는 날 이내</li>
+                <li>국제예비심사는 선택 절차로, 청구 시에만 소요되며 해당 기관에 직접 송금</li>
+                <li>재외기관 연락처 : 오스트리아(43-1)53424-0 / 일본(81-3)3592-1308 / 호주(61-2)6222-3626 / 싱가포르(65)63-39-86-16</li>
+                <li>국제예비심사기관이 오스트리아인 경우, 출원인 전원이 자연인이고 오스트리아 국민·거주자이면 예비심사료 75% 감면</li>
+            </ul>
+
+            <h3>참조사항 · 가산료</h3>
+            <ul class="note-list">
+                <li>모든 서식은 특허로 메인화면 하단 민원서식 다운로드에서 입수 가능</li>
+                <li>PCT국제출원 수수료는 환율 등에 따라 수시 변경되므로 제출 시 최신 수수료를 반드시 확인</li>
+                <li>가산료는 각 분기 시작 첫째날 KEB하나은행 최초고시 매매기준율로 정해지는 원화로 함(휴장일은 다음 개장일 기준)</li>
+            </ul>
+        </section>
+
+        <!-- SECTION 6 -->
+        <section class="fee-section" id="sec-madrid" data-title="마드리드 의정서에 의한 국제출원수수료 등">
+            <div class="section-head">
+                <h2><span class="sec-num">06</span> 마드리드 의정서에 의한 국제출원수수료 등</h2>
+                <button type="button" class="fav-star" aria-label="즐겨찾기 추가/해제" title="즐겨찾기"><i class="fa-regular fa-star"></i></button>
+            </div>
+            <p class="table-note"><span>표는 좌우로 스크롤할 수 있습니다.</span></p>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">마드리드 국제출원 수수료: 본국관청 출원, 지정국관청 출원</caption>
+                    <thead><tr><th colspan="4">종류</th><th colspan="2">수수료</th><th>납부처</th></tr></thead>
+                    <tbody>
+                        <tr><th rowspan="9">본국관청 출원<br>(한국→해외)</th><th rowspan="2">국제출원 기본수수료</th><td colspan="1">흑백표장</td><td colspan="1">653 CHF</td><td colspan="1"></td><td rowspan="5">국제사무국</td></tr>
+                        <tr><td colspan="1">색채표장</td><td colspan="1">903 CHF</td><td></td></tr>
+                        <tr><th colspan="2">개별수수료</th><td colspan="2">각 국가별 수수료</td></tr>
+                        <tr><th colspan="1">비개별수수료</th><td>추가수수료</td><td colspan="2">1개류당 100 CHF(3개류 초과 시)</td></tr>
+                        <tr><th colspan="1"></th><td>보충수수료</td><td colspan="2">1지정국당 100 CHF</td></tr>
+                        <tr><th colspan="2">지식재산처 납부수수료</th><td colspan="2">매건 5,000원(서면출원 15,000원)</td><td>한국지식재산처</td></tr>
+                        <tr><th rowspan="3">사후지정신청</th><th colspan="1">기본수수료</th><td colspan="2">300 CHF</td><td rowspan="3">국제사무국</td></tr>
+                        <tr><th colspan="1">개별수수료</th><td colspan="2">각 국가별 수수료</td></tr>
+                        <tr><th colspan="1">비개별수수료(보충)</th><td colspan="2">1지정국당 100 CHF</td></tr>
+                        <tr><th colspan="2">지식재산처 납부수수료</th><td colspan="2">매건 5,000원(서면출원 15,000원)</td><td>한국지식재산처</td></tr>
+                        <tr><th rowspan="4">국제등록존속기간<br>갱신신청</th><th colspan="2">기본수수료</th><td colspan="2">653 CHF</td><td rowspan="3">국제사무국</td></tr>
+                        <tr><th colspan="2">개별수수료</th><td colspan="2">각 국가별 수수료</td></tr>
+                        <tr><th colspan="1">비개별(추가)</th><td colspan="2">1개류당 100 CHF(3개류 초과 시)</td></tr>
+                        <tr><th colspan="2">지식재산처 납부수수료</th><td colspan="2">매건 3,000원(서면출원 13,000원)</td><td>한국지식재산처</td></tr>
+                        <tr><th colspan="2">국제등록명의변경등록신청</th><td colspan="2">177 CHF(국제등록 1건당)</td><td>국제사무국</td></tr>
+                        <tr><th colspan="2">지식재산처 납부수수료</th><td colspan="2">매건 3,000원(서면출원 13,000원)</td><td>한국지식재산처</td></tr>
+                        <tr><th rowspan="4">지정국관청 출원<br>(해외→한국)</th><th colspan="2">국제상표 분할신청(국제사무국 수수료)</th><td colspan="2">177 CHF(국제등록 1건당)</td><td>국제사무국</td></tr>
+                        <tr><th colspan="2">지식재산처 납부수수료</th><td colspan="2">아래 참조</td><td rowspan="3">한국지식재산처</td></tr>
+                        <tr><th colspan="2">지정상품 보정</th><td colspan="2">매건 10,000원</td></tr>
+                        <tr><th colspan="2">지정기간연장신청(1회차/2회차)</th><td colspan="2">1회차 20,000원 / 2회차 30,000원</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="note-list">
+                <li>개별수수료 납부국은 비개별수수료 미적용, 지정기간연장신청은 2회까지만 가능</li>
+                <li>국제상표 분할신청 : 출원 매건 68,000원, 등록 매건 73,000원(동일 상품류구분 내 지정상품 변경/삭제 분할은 매건 13,000원)</li>
+            </ul>
+        </section>
+
+        <!-- SECTION 7 -->
+        <section class="fee-section" id="sec-hague" data-title="헤이그협정에 따른 국제출원수수료">
+            <div class="section-head">
+                <h2><span class="sec-num">07</span> 헤이그협정에 따른 국제출원수수료</h2>
+                <button type="button" class="fav-star" aria-label="즐겨찾기 추가/해제" title="즐겨찾기"><i class="fa-regular fa-star"></i></button>
+            </div>
+
+            <h3>국제출원 수수료</h3>
+            <p class="table-note"><span>표는 좌우로 스크롤할 수 있습니다.</span></p>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">헤이그협정 국제출원 수수료</caption>
+                    <thead><tr><th colspan="2">종류</th><th colspan="3">금액</th><th>납부처</th></tr></thead>
+                    <tbody>
+                        <tr><th rowspan="2" colspan="2">송달료</th><td colspan="2">전자출원</td><td>5,000원</td><td rowspan="2">한국지식재산처</td></tr>
+                        <tr><td colspan="2">서면출원</td><td>15,000원</td></tr>
+                        <tr><th rowspan="2" colspan="2">기본료(A)</th><td colspan="2">최초 1디자인</td><td>397 CHF</td><td rowspan="12">국제사무국</td></tr>
+                        <tr><td colspan="2">추가 디자인마다</td><td>50 CHF</td></tr>
+                        <tr><th rowspan="2" colspan="2">공개료(B)</th><td colspan="2">1도면마다</td><td>17 CHF</td></tr>
+                        <tr><td colspan="2">도면 표현 첫 면 초과 면마다(서면출원)</td><td>150 CHF</td></tr>
+                        <tr><th colspan="2">추가수수료(C)</th><td colspan="2">설명 100단어 초과 1단어당</td><td>2 CHF</td></tr>
+                        <tr><th rowspan="7" colspan="1">지정수수료(D)<br><span class="dim">각 체약당사자 지정 금액</span></th><th rowspan="2">표준(1수준)</th><td colspan="2">1디자인</td><td>42 CHF</td></tr>
+                        <tr><td colspan="2">추가 디자인마다</td><td>2 CHF</td></tr>
+                        <tr><th rowspan="2">표준(2수준)</th><td colspan="2">1디자인</td><td>60 CHF</td></tr>
+                        <tr><td colspan="2">추가 디자인마다</td><td>20 CHF</td></tr>
+                        <tr><th rowspan="2">표준(3수준)</th><td colspan="2">1디자인</td><td>90 CHF</td></tr>
+                        <tr><td colspan="2">추가 디자인마다</td><td>50 CHF</td></tr>
+                        <tr><th>개별지정수수료</th><td colspan="3">각 체약당사자가 선언으로 정한 금액</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>국제등록 갱신료</h3>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">헤이그협정 국제등록 갱신료</caption>
+                    <thead><tr><th colspan="2">종류</th><th colspan="2">금액</th><th>납부처</th></tr></thead>
+                    <tbody>
+                        <tr><th rowspan="2" colspan="2">기본료(A)</th><td>최초 1디자인</td><td>200 CHF</td><td rowspan="5">국제사무국</td></tr>
+                        <tr><td>추가 디자인마다</td><td>17 CHF</td></tr>
+                        <tr><th rowspan="3">지정수수료(B)</th><th rowspan="2">표준지정수수료</th><td>1디자인</td><td>21 CHF</td></tr>
+                        <tr><td>추가 디자인마다</td><td>1 CHF</td></tr>
+                        <tr><th>개별지정수수료</th><td colspan="2">각 체약당사자가 선언으로 정한 금액</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>국제등록 변경 신청</h3>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">헤이그협정 국제등록 변경신청 수수료</caption>
+                    <thead><tr><th>종류</th><th colspan="2">금액</th><th>납부처</th></tr></thead>
+                    <tbody>
+                        <tr><th>명의변경</th><td colspan="2">144 CHF</td><td rowspan="6">국제사무국</td></tr>
+                        <tr><th rowspan="2">권리자 성명·주소 변경</th><td>1국제등록</td><td>144 CHF</td></tr>
+                        <tr><td>추가 국제등록마다</td><td>72 CHF</td></tr>
+                        <tr><th>국제등록 포기</th><td colspan="2">144 CHF</td></tr>
+                        <tr><th>국제등록 감축</th><td colspan="2">144 CHF</td></tr>
+                        <tr><th>국제등록 초본신청</th><td colspan="2">144 CHF</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 8 -->
+        <section class="fee-section" id="sec-discount" data-title="특허료, 등록료 및 수수료의 감면 안내">
+            <div class="section-head">
+                <h2><span class="sec-num">08</span> 특허료, 등록료 및 수수료의 감면 안내</h2>
+                <button type="button" class="fav-star" aria-label="즐겨찾기 추가/해제" title="즐겨찾기"><i class="fa-regular fa-star"></i></button>
+            </div>
+
+            <h3>감면 대상 수수료</h3>
+            <ul class="note-list">
+                <li>출원료, 심사청구료, 최초 3년분 특허(등록)료, 4년차분 이후 특허(등록)료, 우선심사신청료(특허), 출원인변경신고료, 권리이전등록료(특허·실용신안), 질권설정등록료(특허·실용신안), 적극적 권리범위확인심판청구료</li>
+                <li><strong>상표는 감면대상에서 제외됩니다.</strong></li>
+            </ul>
+
+            <h3>신청 방법</h3>
+            <p>출원·심사청구·권리설정등록·심판청구 등 신청 시 서면(출원서, 심사청구서, 납부서 등)에 감면사유를 기재하고 증명서류를 제출합니다.</p>
+
+            <h3>감면율별 요약</h3>
+            <p class="table-note"><span>대상 수수료 : 출원료, 심사청구료, 최초 3년분의 특허(등록)료 (별도 표기 시 제외)</span></p>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">감면율별 대상자 요약표</caption>
+                    <thead><tr><th>감면율</th><th>대상</th><th>비고</th></tr></thead>
+                    <tbody>
+                        <tr><th class="highlight">100%<br>(전액면제)</th><td>국민기초생활보장법 의료급여수급자 / 국가유공자·유족·가족 등 / 등록장애인 / 초중고 재학생 / 6~18세 / 병역의무 수행자 등</td><td>발명자=출원인 동일 필요, 연간 최대 5건(‘24년 이전 출원 10건)</td></tr>
+                        <tr><th class="highlight">85%</th><td>19~29세, 65세 이상</td><td>연간 20건 초과 시 30% 감면으로 조정</td></tr>
+                        <tr><th class="highlight">70%</th><td>개인, 중소기업</td><td>연간 20건 초과 시 30% 감면. 적극적 권리범위확인심판청구료도 70%</td></tr>
+                        <tr><th class="highlight">50%</th><td>중소기업+비중소기업 공동연구출원, 공공연구기관, 전담조직, 지방자치단체</td><td>전담조직은 적극적 권리범위확인심판청구료 50%</td></tr>
+                        <tr><th class="highlight">30%</th><td>중견기업</td><td>4~9년분 특허(등록)료는 별도 표 참조</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="note-list">
+                <li>2026.1.1. 기준 : 19~29세는 1996.1.2.~2007.1.1.생, 65세 이상은 1961.1.1.생 이전, 6~18세는 2007.1.2.~2020.1.1.생</li>
+                <li>국가유공자 등·등록장애인 증명서류를 이미 제출한 경우 생략 가능(서식에 생략의사표시 및 색인정보 기재)</li>
+            </ul>
+
+            <h3>4년차분 이후 특허(등록)료 감면 (한시적, 납입개시일 2029.2.28.까지)</h3>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">4~9년분/4~존속기간 특허등록료 한시 감면</caption>
+                    <thead><tr><th>구간</th><th>감면율</th><th>대상</th></tr></thead>
+                    <tbody>
+                        <tr><th>4~9년분</th><td class="highlight">70% (중소기업)</td><td rowspan="2">직무발명보상 우수기업 선정 또는 지식재산 경영인증 기업</td></tr>
+                        <tr><th>4~9년분</th><td class="highlight">50% (중견기업)</td></tr>
+                        <tr><th>4~존속기간</th><td class="highlight">70%</td><td>기술신탁관리기관(개인·중소기업·공공연구기관·전담조직·지자체의 신탁 설정 시)</td></tr>
+                        <tr><th>4~존속기간</th><td class="highlight">50%</td><td>개인, 중소기업, 공공연구기관, 전담조직, 지방자치단체</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>우선심사신청료 감면대상 (특허출원에 한정)</h3>
+            <ul class="note-list">
+                <li>사업 개시일부터 3년 이내 특허출원의 우선심사 신청(연간 10건 한정) 중 중소기업 : <strong>70% 감면</strong> (2027.12.31.까지 신청 건에 한함)</li>
+                <li>사업 개시일 기준 : 법인은 법인설립등기일, 개인은 사업개시일(개업연월일)</li>
+            </ul>
+
+            <h3>중소기업 · 중견기업 · 공공연구기관 정의 및 증명서류</h3>
+            <ul class="note-list">
+                <li><strong>중소기업</strong> : 중소기업기본법 제2조제1항 — 사업자등록증 사본 + 중소기업확인서 또는 최근 3개년 매출액 확인서류(sminfo.mss.go.kr에서 확인서 발급)</li>
+                <li><strong>중견기업</strong> : 중견기업 성장촉진 및 경쟁력강화에 관한 특별법 — 중견기업 확인서(한국중견기업연합회 발급)</li>
+                <li><strong>공공연구기관</strong> : 국공립연구기관, 정부출연연구기관, 특정연구기관, 국공립/사립학교, 기타 연구개발 관련 법인·단체 등</li>
+            </ul>
+
+            <h3>특별재난지역 등 선포 시 감면대상</h3>
+            <ul class="note-list">
+                <li>공통요건 : 재난사태·특별재난지역 선포일 기준 해당 지역에 주소(법인은 주사무소)를 둔 개인·법인으로서 재난 피해를 입은 경우, 감면기간은 선포일로부터 1년간</li>
+            </ul>
+            <div class="table-wrap">
+                <table>
+                    <caption class="sr-only">특별재난지역 선포시 출원료 등 감면율</caption>
+                    <thead><tr><th>대상수수료</th><th>대상</th><th>감면율</th></tr></thead>
+                    <tbody>
+                        <tr><th rowspan="2">출원료·심사청구료·최초3년분등록료</th><td>19~29세 / 65세 이상</td><td class="highlight">90%</td></tr>
+                        <tr><td>그 외 개인 / 소상공인</td><td class="highlight">80%</td></tr>
+                        <tr><th rowspan="2">4년분~존속기간 등록료</th><td>19~29세 / 65세 이상 / 그 외 개인</td><td class="highlight">70%</td></tr>
+                        <tr><td>소상공인</td><td class="highlight">70%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>평균감면 제도</h3>
+            <p>감면대상자들이 공동으로 출원할 때, 서로의 감면율이 다르면 각각의 감면율을 더해 대상자 수로 나눈 '평균감면율'을 적용합니다. (예 : 중소기업 50% + 중견기업 30% → 평균감면율 40%, 소수점은 올림 처리)</p>
+
+            <h3>전자등록증 발급 시 차감 제도</h3>
+            <p>권리 설정등록(신규등록) 시 특허증·실용신안등록증·디자인등록증·상표등록증을 전자문서로 발급받으면 설정등록료에서 <strong>10,000원 차감</strong>됩니다. 접속경로 : 특허로 &gt; My특허로 &gt; 특허고객정보관리 &gt; 특허고객정보 변경 신청.</p>
+        </section>
+
+        <!-- SECTION 9 -->
+        <section class="fee-section" id="sec-pay" data-title="납부방법">
+            <div class="section-head">
+                <h2><span class="sec-num">09</span> 납부방법</h2>
+                <button type="button" class="fav-star" aria-label="즐겨찾기 추가/해제" title="즐겨찾기"><i class="fa-regular fa-star"></i></button>
+            </div>
+            <ul class="note-list">
+                <li>접수번호(납부자번호) 부여일 다음날까지 전국 국고수납은행 또는 지로(giro.or.kr) 납부</li>
+                <li>우편 요금납부 시 우체국 통상환으로 교환하여 서류에 동봉·제출</li>
+                <li>수수료만 보정하는 경우 지식재산처 발송 납부서로 납부</li>
+                <li>연차특허(등록)료 납부절차 간소화 : 지정납부자번호만으로 정상납부기간 내 납부 가능(2006.07.01 시행)</li>
+                <li>수수료 자동납부제도 : 출원료·심사청구료·설정등록료·심판청구료 등을 사전등록 계좌에서 자동 이체(2009.07.01 시행)</li>
+                <li>수수료 마일리지제도 폐지(2014.03.01) : 폐지 전 적립 마일리지는 유효기간(5년) 경과 전까지 사용 가능</li>
+                <li>본 일람표는 '특허료 등의 징수규칙'을 바탕으로 작성된 참고용 자료이며, 관련 법령 개정으로 실제와 다를 수 있습니다.</li>
+            </ul>
+        </section>
+
+        <!-- SECTION 10 -->
+        <section class="fee-section" id="sec-rule" data-title="특허료 등의 징수규칙 보기">
+            <div class="section-head">
+                <h2><span class="sec-num">10</span> 특허료 등의 징수규칙 보기</h2>
+                <button type="button" class="fav-star" aria-label="즐겨찾기 추가/해제" title="즐겨찾기"><i class="fa-regular fa-star"></i></button>
+            </div>
+            <ul class="note-list">
+                <li>특허료 등의 징수규칙 [시행 2026.2.27.] [총리령 제2098호, 2026.2.27., 일부개정] —
+                    <a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%ED%8A%B9%ED%97%88%EB%A3%8C%EB%93%B1%EC%9D%98%EC%A7%95%EC%88%98%EA%B7%9C%EC%B9%99/" target="_blank" rel="noopener">국가법령정보센터에서 보기 ↗</a>
+                </li>
+                <li>출원료 등의 수수료 감면을 위한 중소기업 증명서류 핸드북 —
+                    <a href="https://www.moip.go.kr/ko/kpoBultnDetail.do?menuCd=SCD0200640&parntMenuCd2=SCD0200281&aprchId=BUT0000048&pgmSeq=16609&ntatcSeq=16609#1" target="_blank" rel="noopener">지식재산처에서 보기 ↗</a>
+                </li>
+            </ul>
+        </section>
+
+        <div class="update-line">원본 콘텐츠 최종 업데이트일(특허로) : 2026년 7월 16일 · 이 페이지 재구성일 : 2026년 9월</div>
+
+        <div id="noResults" class="no-results" hidden>
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <p>검색 결과가 없습니다. 다른 검색어를 입력해 보세요.</p>
+        </div>
+    </main>
+</div>
+
+<!-- ===================== Back to top ===================== -->
+<button type="button" id="backToTopBtn" class="back-to-top" aria-label="맨 위로 이동" hidden>
+    <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+<!-- ===================== Footer ===================== -->
+<footer class="site-footer">
+    <div class="footer-inner">
+        <p>본 페이지는 특허청·지식재산처의 「특허로」 수수료정보안내(patent.go.kr)를 참고하여 반응형으로 재구성한 <strong>비공식 안내 자료</strong>입니다. 실제 납부·신청 시에는 반드시 특허로 원문 및 관련 법령을 확인하세요.</p>
+        <p class="footer-links">
+            <a href="https://www.patent.go.kr/smart/jsp/ka/menu/fee/main/FeeMain01.do" target="_blank" rel="noopener">특허로 원문 바로가기 ↗</a>
+            <span aria-hidden="true">·</span>
+            <a href="https://www.moip.go.kr" target="_blank" rel="noopener">지식재산처 ↗</a>
+        </p>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
